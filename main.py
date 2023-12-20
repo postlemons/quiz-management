@@ -60,6 +60,7 @@ while 1:
         password = input("Password: ")
         email = input("Email: ")
         name = input("Name: ")
+        
 # Saves the user data to the file
         with open("res/accounts.txt", "r") as file:
             array = json.load(file)
