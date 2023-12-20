@@ -5,46 +5,62 @@ import os
 # for the visual purposes (cleans the console)
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
-
+# Function for terminating the App
+def closeApp(): 
+    os.system("cls" if os.name == "nt" else "clear")
+    print("✅ Closed the app")
+    exit()
 
 UserAuth: [int, str] = []
-done: int = 0
+validLogin: int = 0
+
 clear()
+
 print("------------------------------")
 print(
     "         Howdy! Good day, isn't it? :D  "
     + "Commands List: \n\nLogin: login / 1 / li\nSign Up: signup / 2 / su"
 )
+
+
 while 1:
     userInput = input().lower()
+
+# Checks for the word "exit" to close the program
     if userInput == "exit":
-        print("✅ Exiting...")
-        clear()
-        exit()
+        closeApp()
+
+# Login or Signup Check
     if userInput == "login" or userInput == "1" or userInput == "li":
-        print("Enter your info to proceed!")
+        clear()
+        print("---------Enter your account info to proceed--------")
         UserID = input("User ID: ")
         password = input("Password: ")
         clear()
+
+# Validates the user information
         with open("res/accounts.txt", "r") as file:
             array = json.load(file)
         for item in array:
             if item[0] == UserID and item[1] == password:
                 UserAuth = item
-                done = 1
+                validLogin = 1
                 break
-        if done == 1:
+        if validLogin == 1:
             break
         else:
             print(
                 '❌ Invalid Creditentials\nType "login" to try again! or "signup" to create an account'
             )
+
     elif userInput == "signup" or userInput == "su" or userInput == "2":
-        print("Enter your info to proceed!")
+        clear()
+        print("---------Enter your account info to proceed--------")
         UserID = input("User ID: ")
         password = input("Password: ")
         email = input("Email: ")
         name = input("Name: ")
+# Saves the user data to the file
         with open("res/accounts.txt", "r") as file:
             array = json.load(file)
         with open("res/accounts.txt", "w") as file:
@@ -55,8 +71,10 @@ while 1:
         print(
             "❌ Invalid Input, avalaible commands are:\n\nLogin: login / 1 / li\nSign Up: signup / 2 / su"
         )
-########################################################
+
+#Checks whether the user is a doctor or not
 if UserAuth[-1] == 1:
+    clear()
     print(
         "Welcome back, Dr."
         + item[-2]
@@ -65,10 +83,10 @@ if UserAuth[-1] == 1:
     while 1:
         userInput = input().lower()
         if userInput == "exit":
-            exit()
+            closeApp()
         if userInput == "1":
             print("Beta?")
-        ### CREATE THE QUIZ ANSWERED OR NOT FOR EACH STUDENT IN THE MENU OR PROVIDE A CUSTOM MENU
+        ### TODO: CREATE THE QUIZ ANSWERED OR NOT FOR EACH STUDENT IN THE MENU OR PROVIDE A CUSTOM MENU
         elif userInput == "2" or userInput == "list":
             with open("res/accounts.txt", "r") as file:
                 array = json.load(file)
