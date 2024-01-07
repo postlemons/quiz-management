@@ -234,7 +234,9 @@ if UserAuth[-1] == 1:
             userInput = input().lower()
 
             ################ Create Quiz
-            while int(userInput) > 2 or int(userInput) < 0:
+
+            while int(userInput) > 2 or int(userInput) < 1:
+              
                 print("❌ Invalid Option, try again")
                 userInput = input("Enter your option: ")
 
@@ -246,7 +248,7 @@ if UserAuth[-1] == 1:
                 for i in range(quesNumbers):
                     questionid = i + 1
                     question = input("Enter Your Question: ")
-                    answers: [str] = []
+                    answers = []
                     for y in range(4):
                         answer = input("Enter Answer No." + str(y + 1) + ": ")
                         answers.append(answer)
