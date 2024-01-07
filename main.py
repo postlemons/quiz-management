@@ -1,3 +1,4 @@
+# I can edit files right here inside the terminal right away :D
 import json
 from tabulate import tabulate
 import os
@@ -11,7 +12,6 @@ def clear():
 def fetchFile(filePath):
     Data = open(filePath, "r")
     return json.load(Data)
-
 
 # Edits the file content
 def modifyFile(filePath, newData):
