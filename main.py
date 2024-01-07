@@ -234,7 +234,9 @@ if UserAuth[-1] == 1:
             userInput = input().lower()
 
             ################ Create Quiz
+
             while int(userInput) > 2 or int(userInput) < 1:
+              
                 print("❌ Invalid Option, try again")
                 userInput = input("Enter your option: ")
 
