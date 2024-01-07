@@ -70,7 +70,7 @@ while 1:
         data = fetchFile("res/accounts.txt")
         for item in data:
             if item[0] == UserID:
-                print("Sorry, username already exits")
+                print("Sorry, ID already exits")
                 break
         else:
             modifyFile(
@@ -180,26 +180,49 @@ if UserAuth[-1] == 1:
         ##################### List students command
 
         elif userInput == "2" or userInput == "list":
-            accounts = fetchFile("res/accounts.txt")
-            answers = fetchFile("res/answers.txt")
-            listQuestions = []
-            questions = fetchFile("res/questions.txt")
-            for question in questions:
-                listQuestions.append(question[1])
-            listQuestions.reverse()
-            for user in accounts:
-                indexCounter = 0
-                if user[-1] == 1:
-                    accounts.remove(user)
+            Questions = fetchFile("res/questions.txt")
+            for item in Questions:
+                for i in range(item[2]):
+                    item.pop(-1)
+            tableOutput(Questions, ["ID", "Title", "No. of Questions"])
+            quizid = input("Enter the ID of the quiz you wanna check: ")
+            Questions = fetchFile("res/questions.txt")
+            quizData = []
+            validQuizID = 0
+            validAnswerID = 0
+            while validQuizID == 0:
+                for item in Questions:
+                    if item[0] == quizid:
+                        quizData = item
+                        validQuizID = 1
+                        break
                 else:
-                    for answeredTitle in user[-3]:
-                        for questionTitle in listQuestions:
-                            if questionTitle == answeredTitle:
-                                user.insert(-1, "✅")
-                    for i in range(5):
-                        user.pop(1)
-                    user.pop(-1)
-            tableOutput(accounts, ["Student ID", "Name"] + listQuestions)
+                    print("❌ Invalid ID, double check it\n")
+                    quizid = input("Enter your quiz ID again: ")
+
+            answers = fetchFile("res/answers.txt")
+            accounts = fetchFile("res/accounts.txt")
+            clear()
+            finalData = []
+            for user in accounts:
+                if (user[-1] == 1):
+                    accounts.remove(user)
+                    continue
+                else:
+                   if(quizid in user[-3]):
+                     solved = "✅"
+                   else:
+                     solved = "❌"
+                for answer in answers:
+                    if(answer[0] == quizid and answer[-2][0] == user[0]):
+                        grade = answer[-1]
+                        break
+                    else:
+                        grade = " "
+                finalData.append([user[0], user[-2], solved, grade])
+            tableOutput(finalData, ["Student ID", "Name", "Solved", "Grade"])
+            print("HINT: type 2 to continue checking!")
+                    
 
         #################### Manage Quizzes command
 
@@ -211,7 +234,7 @@ if UserAuth[-1] == 1:
             userInput = input().lower()
 
             ################ Create Quiz
-            while int(userInput) > 2 or int(userInput) < 0:
+            while int(userInput) > 2 or int(userInput) < 1:
                 print("❌ Invalid Option, try again")
                 userInput = input("Enter your option: ")
 
@@ -223,11 +246,18 @@ if UserAuth[-1] == 1:
                 for i in range(quesNumbers):
                     questionid = i + 1
                     question = input("Enter Your Question: ")
-                    answers: [str] = []
+                    answers = []
                     for y in range(4):
                         answer = input("Enter Answer No." + str(y + 1) + ": ")
                         answers.append(answer)
-                    ValidAnswer = input("Enter the valid answer (1/2/3/4): ")
+                    validInt = 0
+                    while validInt == 0:
+                        
+                     ValidAnswer = input("Enter the valid answer (1/2/3/4): ")
+                     if(int(ValidAnswer) > 0 and int(ValidAnswer) < 5):
+                         validInt = 1
+                     else:
+                         print("❌ Invalid Input")
                     answers.append(answers[int(ValidAnswer) - 1])
                     QuestionsData.append([questionid, question, answers])
                     print("----------------")
@@ -353,7 +383,7 @@ else:
                 grade = "F"
             finalData.append(grade)
             accounts = fetchFile("res/accounts.txt")
-            UserAuth[-3].append(finalData[1])
+            UserAuth[-3].append(finalData[0])
             for item in accounts:
                 if item[0] == UserAuth[0]:
                     item.clear()
